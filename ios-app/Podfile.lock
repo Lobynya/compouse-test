@@ -1,0 +1,103 @@
+PODS:
+  - FirebaseCore (7.10.0):
+    - FirebaseCoreDiagnostics (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+  - FirebaseCoreDiagnostics (7.10.0):
+    - GoogleDataTransport (~> 8.4)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+    - nanopb (~> 2.30908.0)
+  - FirebaseCrashlytics (7.10.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstallations (~> 7.0)
+    - GoogleDataTransport (~> 8.4)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (~> 1.2)
+  - FirebaseInstallations (7.10.0):
+    - FirebaseCore (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - PromisesObjC (~> 1.2)
+  - GoogleDataTransport (8.4.0):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Environment (7.3.1):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (7.3.1):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (7.3.1):
+    - GoogleUtilities/Logger
+  - MCRCDynamicProxy (0.1.0)
+  - MCRCStaticReporter (0.1.0):
+    - FirebaseCrashlytics (~> 7.3)
+    - MCRCDynamicProxy
+  - MultiPlatformLibrary (0.1.0)
+  - MultiPlatformLibraryUnits/Core (0.5.0):
+    - MultiPlatformLibrary
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
+  - PromisesObjC (1.2.12)
+
+DEPENDENCIES:
+  - MCRCDynamicProxy (from `https://github.com/icerockdev/moko-crash-reporting.git`, tag `release/0.1.2`)
+  - MCRCStaticReporter (from `https://github.com/icerockdev/moko-crash-reporting.git`, tag `release/0.1.2`)
+  - MultiPlatformLibrary (from `../mpp-library`)
+  - MultiPlatformLibraryUnits/Core (from `https://github.com/icerockdev/moko-units.git`, tag `release/0.5.0`)
+
+SPEC REPOS:
+  trunk:
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - GoogleDataTransport
+    - GoogleUtilities
+    - nanopb
+    - PromisesObjC
+
+EXTERNAL SOURCES:
+  MCRCDynamicProxy:
+    :git: https://github.com/icerockdev/moko-crash-reporting.git
+    :tag: release/0.1.2
+  MCRCStaticReporter:
+    :git: https://github.com/icerockdev/moko-crash-reporting.git
+    :tag: release/0.1.2
+  MultiPlatformLibrary:
+    :path: "../mpp-library"
+  MultiPlatformLibraryUnits:
+    :git: https://github.com/icerockdev/moko-units.git
+    :tag: release/0.5.0
+
+CHECKOUT OPTIONS:
+  MCRCDynamicProxy:
+    :git: https://github.com/icerockdev/moko-crash-reporting.git
+    :tag: release/0.1.2
+  MCRCStaticReporter:
+    :git: https://github.com/icerockdev/moko-crash-reporting.git
+    :tag: release/0.1.2
+  MultiPlatformLibraryUnits:
+    :git: https://github.com/icerockdev/moko-units.git
+    :tag: release/0.5.0
+
+SPEC CHECKSUMS:
+  FirebaseCore: ec566d917b2195fc2610aeb148dae99f57a788f9
+  FirebaseCoreDiagnostics: 5662a3823ffcc0acbaa9a21ba5ed302fac634705
+  FirebaseCrashlytics: e7669d368a22d202f1d0c7546ffdfdff496e1a8c
+  FirebaseInstallations: bf2ec8dbf36ff4c91af6b9a003d15855757680c1
+  GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
+  GoogleUtilities: e1d9ed4e544fc32a93e00e721400cbc3f377200d
+  MCRCDynamicProxy: 973f00896869b2a42b627e25e1273637144e0458
+  MCRCStaticReporter: cd86088a80da448449d07eb8d1f7c63420570ca2
+  MultiPlatformLibrary: 17d6f2734e9e3594f158c753a7b3163924927bf5
+  MultiPlatformLibraryUnits: 26517ff8ada16dfef58ace700f92cbfb0c222e01
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+
+PODFILE CHECKSUM: b601cfc48c5cc1ac58b2a7f8c92ce24cfbef1af1
+
+COCOAPODS: 1.10.0

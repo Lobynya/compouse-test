@@ -1,0 +1,235 @@
+include:
+  - 'https://gitlab.icerockdev.com/open-source/gitlab-ci-mobile/-/raw/master/.common.yml'
+  - 'https://gitlab.icerockdev.com/open-source/gitlab-ci-mobile/-/raw/master/.ios.yml'
+  - 'https://gitlab.icerockdev.com/open-source/gitlab-ci-mobile/-/raw/master/.android.yml'
+
+stages:
+  - check
+  - build
+  - deploy
+
+variables:
+  extends: .global_variables
+  BUILD_CRASHLYTICS_TEST_GROUPS: "icerock-testers"
+
+  # iOS-config
+  IOS_BUNDLEID_DEV: "INSERT_HERE"
+  IOS_SCHEME_DEV: "INSERT_HERE"
+  FIREBASE_APP_ID_IOS_DEV: "INSERT_HERE"
+
+  IOS_BUNDLEID_PROD: "INSERT_HERE"
+  IOS_SCHEME_PROD: "INSERT_HERE"
+  FIREBASE_APP_ID_IOS_PROD: "INSERT_HERE"
+
+  # Android-config
+  FIREBASE_APP_ID_ANDROID_DEV: "INSERT_HERE"
+  FIREBASE_APP_ID_ANDROID_PROD: "INSERT_HERE"
+
+.ios_dev_pre_script: &ios_dev_pre_script
+  PRE_SCRIPT: >
+    export MATCH_GIT_BRANCH=$MATCH_GIT_BRANCH_DEV &&
+    export FASTLANE_TEAM_ID=$FASTLANE_TEAM_ID_DEV &&
+    cp ./ios-app/src/Firebase/GoogleService-Info-Dev.plist ./ios-app/GoogleService-Info.plist
+
+.ios_prod_pre_script: &ios_prod_pre_script
+  PRE_SCRIPT: >
+        export MATCH_GIT_BRANCH=$MATCH_GIT_BRANCH_PROD &&
+        export FASTLANE_TEAM_ID=$FASTLANE_TEAM_ID_PROD &&
+        cp ./ios-app/src/Firebase/GoogleService-Info-Prod.plist ./ios-app/GoogleService-Info.plist
+
+.ios_stage_pre_script: &ios_stage_pre_script
+  PRE_SCRIPT: >
+        export MATCH_GIT_BRANCH=$MATCH_GIT_BRANCH_STAGE &&
+        export FASTLANE_TEAM_ID=$FASTLANE_TEAM_ID_STAGE &&
+        cp ./ios-app/src/Firebase/GoogleService-Info-Stage.plist ./ios-app/GoogleService-Info.plist
+
+build ios dev:
+  extends: .build_ios_mpp
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_DEV
+    BUILD_SCHEME: $IOS_SCHEME_DEV
+    <<: *ios_dev_pre_script
+  except:
+    - branches
+  only:
+    - /^build/ios/dev/[0-9]*$/
+
+deploy ios to dev firebase:
+  extends: .deploy_ios_mpp_firebase
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_DEV
+    BUILD_SCHEME: $IOS_SCHEME_DEV
+    BUILD_EXPORT_METHOD: 'enterprise'
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_IOS_DEV
+    <<: *ios_dev_pre_script
+  environment:
+    name: firebase ios dev
+  except:
+    - branches
+  only:
+    - /^build/ios/dev/[0-9]*$/
+
+build ios prod:
+  extends: .build_ios_mpp
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_PROD
+    BUILD_SCHEME: $IOS_SCHEME_PROD
+    <<: *ios_prod_pre_script
+  except:
+    - branches
+  only:
+    - /^build/ios/prod/[0-9]*$/
+    
+deploy ios to prod firebase:
+  extends: .deploy_ios_mpp_firebase
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_PROD
+    BUILD_SCHEME: $IOS_SCHEME_PROD
+    BUILD_EXPORT_METHOD: 'ad-hoc'
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_IOS_PROD
+    <<: *ios_prod_pre_script
+  environment:
+    name: firebase ios prod
+  except:
+    - branches
+  only:
+    - /^build/ios/prod/[0-9]*$/
+
+deploy ios to prod appstore:
+  extends: .deploy_ios_mpp_appstore
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_PROD
+    BUILD_SCHEME: $IOS_SCHEME_PROD
+    BUILD_EXPORT_METHOD: 'app-store'
+    <<: *ios_prod_pre_script
+  environment:
+    name: appstore ios prod
+  when: manual
+  except:
+    - branches
+  only:
+    - /^build/ios/prod/[0-9]*$/
+
+build ios stage:
+  extends: .build_ios_mpp
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_STAGE
+    BUILD_SCHEME: $IOS_SCHEME_STAGE
+    <<: *ios_stage_pre_script
+  except:
+    - branches
+  only:
+    - /^build/ios/stage/[0-9]*$/
+
+deploy ios to stage firebase:
+  extends: .deploy_ios_mpp_firebase
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_STAGE
+    BUILD_SCHEME: $IOS_SCHEME_STAGE
+    BUILD_EXPORT_METHOD: 'ad-hoc'
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_IOS_STAGE
+    <<: *ios_stage_pre_script
+  environment:
+    name: firebase ios stage
+  except:
+    - branches
+  only:
+    - /^build/ios/stage/[0-9]*$/
+
+deploy ios to stage appstore:
+  extends: .deploy_ios_mpp_appstore
+  variables:
+    BUILD_APP_IDENTIFIER: $IOS_BUNDLEID_STAGE
+    BUILD_SCHEME: $IOS_SCHEME_STAGE
+    BUILD_EXPORT_METHOD: 'app-store'
+    <<: *ios_stage_pre_script
+  environment:
+    name: appstore ios stage
+  when: manual
+  except:
+    - branches
+  only:
+    - /^build/ios/stage/[0-9]*$/
+
+build android dev:
+  extends: .build_android
+  variables:
+    ASSEMBLE_TASK: :android-app:assembleDevRelease
+    ARTIFACT_APK: android-app/build/outputs/apk/dev/release/android-app-dev-release.apk
+  except:
+    - branches
+  only:
+    - /^build/android/dev/[0-9]*$/
+
+build android stage:
+  extends: .build_android
+  variables:
+    ASSEMBLE_TASK: :android-app:assembleStageRelease
+    ARTIFACT_APK: android-app/build/outputs/apk/stage/release/android-app-stage-release.apk
+  except:
+    - branches
+  only:
+    - /^build/android/stage/[0-9]*$/
+
+build android prod:
+  extends: .build_android
+  variables:
+    ASSEMBLE_TASK: :android-app:assembleProdRelease
+    ARTIFACT_APK: android-app/build/outputs/apk/prod/release/android-app-prod-release.apk
+  except:
+    - branches
+  only:
+    - /^build/android/prod/[0-9]*$/
+
+deploy android dev to firebase:
+  extends: .deploy_android_firebase
+  variables:
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_ANDROID_DEV
+  environment:
+    name: firebase android dev
+  except:
+    - branches
+  only:
+    - /^build/android/dev/[0-9]*$/
+
+deploy android stage to firebase:
+  extends: .deploy_android_firebase
+  variables:
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_ANDROID_STAGE
+  environment:
+    name: firebase android stage
+  except:
+    - branches
+  only:
+    - /^build/android/stage/[0-9]*$/
+
+deploy android prod to firebase:
+  extends: .deploy_android_firebase
+  variables:
+    FIREBASE_APP_ID: $FIREBASE_APP_ID_ANDROID_PROD
+  environment:
+    name: firebase android prod
+  except:
+    - branches
+  only:
+    - /^build/android/prod/[0-9]*$/
+
+tests:
+  stage: check
+  script:
+    - (cd ios-app && pod install)
+    - ./gradlew build syncMultiPlatformLibraryDebugFrameworkIosX64 -x linkMultiPlatformLibraryDebugFrameworkIosArm64 -x linkMultiPlatformLibraryReleaseFrameworkIosArm64 -x linkMultiPlatformLibraryReleaseFrameworkIosX64
+    - cd ios-app
+    - pod install
+    - xcodebuild -scheme ${IOS_SCHEME_DEV} -workspace ios-app.xcworkspace -configuration dev-debug -sdk iphonesimulator -arch x86_64 build CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO | xcpretty
+  artifacts:
+    when: always
+    reports:
+      junit: "**/test-results/**/TEST-*.xml"
+  only:
+    - merge_requests
+  tags:
+    - gradle
+    - android
+    - osx
+    - xcode
