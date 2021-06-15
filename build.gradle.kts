@@ -4,7 +4,6 @@
 
 plugins {
     plugin(Deps.Plugins.detekt) apply false
-    id("dev.icerock.gradle.talaiot") version ("2.+")
 }
 
 buildscript {
@@ -15,11 +14,8 @@ buildscript {
     }
     dependencies {
         plugin(Deps.Plugins.mokoResources)
-        plugin(Deps.Plugins.mokoNetwork)
         plugin(Deps.Plugins.mokoUnits)
         plugin(Deps.Plugins.kotlinSerialization)
-        plugin(Deps.Plugins.firebaseCrashlytics)
-        plugin(Deps.Plugins.googleServices)
     }
 }
 
@@ -27,6 +23,8 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+        gradlePluginPortal()
+        jcenter()
 
         jcenter {
             content {

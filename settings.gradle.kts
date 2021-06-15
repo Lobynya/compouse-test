@@ -4,4 +4,4 @@
 
 include(":android-app")
 include(":mpp-library")
-include(":mpp-library:feature:auth")
+include(":mpp-library:feature:main")

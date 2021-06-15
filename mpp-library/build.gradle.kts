@@ -8,7 +8,6 @@ plugins {
     plugin(Deps.Plugins.mobileMultiplatform)
     plugin(Deps.Plugins.mokoResources)
     plugin(Deps.Plugins.iosFramework)
-    plugin(Deps.Plugins.mokoNetwork)
     plugin(Deps.Plugins.kotlinSerialization)
     plugin(Deps.Plugins.kotlinParcelize)
 }
@@ -23,26 +22,26 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.mokoMvvmState,
     Deps.Libs.MultiPlatform.mokoUnits,
     Deps.Libs.MultiPlatform.mokoFields,
-    Deps.Libs.MultiPlatform.mokoNetwork,
     Deps.Libs.MultiPlatform.mokoErrors,
-    Deps.Libs.MultiPlatform.mokoNetworkErrors,
     Deps.Libs.MultiPlatform.mokoCrashReportingCore,
     Deps.Libs.MultiPlatform.mokoCrashReportingCrashlytics,
     Deps.Libs.MultiPlatform.mokoCrashReportingNapier
 )
 val mppModules = listOf(
-    Deps.Modules.Feature.auth
+    Deps.Modules.Feature.main
 )
+
+android{
+    configurations{
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+}
 
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.coroutines)
-
-    commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClient)
-    commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
-
     androidMainImplementation(Deps.Libs.Android.lifecycle)
-
     mppLibs.forEach { commonMainApi(it.common) }
     mppModules.forEach { commonMainApi(project(it.name)) }
 
@@ -50,7 +49,6 @@ dependencies {
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoMvvmTest)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.mokoUnitsTest)
     commonTestImplementation(Deps.Libs.MultiPlatform.Tests.multiplatformSettingsTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.ktorClientMock)
 }
 
 multiplatformResources {
@@ -68,8 +66,3 @@ cocoaPods {
     pod("MCRCDynamicProxy", onlyLink = true)
 }
 
-mokoNetwork {
-    spec("news") {
-        inputSpec = file("src/api/openapi.yml")
-    }
-}

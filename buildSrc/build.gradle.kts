@@ -7,13 +7,14 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
     google()
+    mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
     implementation("dev.icerock:mobile-multiplatform:0.9.2")
     // should be in sync with Deps.kotlinTestVersion and Deps.kotlinxSerializationPluginVersion
+    implementation("com.android.tools.build:gradle:7.1.0-alpha01")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
-    implementation("com.android.tools.build:gradle:4.1.3")
 }

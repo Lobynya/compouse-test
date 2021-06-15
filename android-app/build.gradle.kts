@@ -5,125 +5,70 @@
 plugins {
     plugin(Deps.Plugins.androidApplication)
     plugin(Deps.Plugins.kotlinAndroid)
-    plugin(Deps.Plugins.kotlinKapt)
-    plugin(Deps.Plugins.mokoUnits)
-    plugin(Deps.Plugins.googleServices) apply false
-    plugin(Deps.Plugins.firebaseCrashlytics) apply false
 }
 
 android {
-    signingConfigs {
-        create("release") {
-            keyAlias = System.getenv("RELEASE_KEY_ALIAS")
-            keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
-            storeFile = file("signing/release.jks")
-            storePassword = System.getenv("RELEASE_STORE_PASSWORD")
-        }
-        create("sharedDebug") {
-            keyAlias = "debug"
-            keyPassword = "debugicerock"
-            storeFile = file("signing/debug.jks")
-            storePassword = "debugicerock"
-        }
+
+    packagingOptions {
+
+        exclude("META-INF/ASL2.0")
     }
 
-    compileSdkVersion(Deps.Android.compileSdk)
-
-    buildFeatures.dataBinding = true
-
-    dexOptions {
-        javaMaxHeapSize = "2g"
-    }
+    compileSdk = 30
+    buildToolsVersion ="30.0.3"
 
     defaultConfig {
-        minSdkVersion(Deps.Android.minSdk)
-        targetSdkVersion(Deps.Android.targetSdk)
+        applicationId ="com.lobynya.composetest"
+        minSdk =21
+        targetSdk =30
+        versionCode =1
+        versionName ="1.0"
 
-        applicationId = "org.example.app"
-
-        versionCode = Integer.parseInt(project.property("VERSION_CODE") as String)
-        versionName = project.property("VERSION_NAME") as String
-
-        vectorDrawables.useSupportLibrary = true
-
-        val url = "https://newsapi.org/v2/"
-        buildConfigField("String", "BASE_URL", "\"$url\"")
+        testInstrumentationRunner ="androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary =true
+        }
     }
 
     buildTypes {
-        getByName("release") {
-            val releaseConfig = signingConfigs.getByName("release")
-            signingConfig = when {
-                releaseConfig.keyAlias != null -> releaseConfig
-                System.getenv("CI") == null -> {
-                    logger.warn("used debug signing for release build!")
-                    signingConfigs.getByName("sharedDebug")
-                }
-                else -> {
-                    throw IllegalArgumentException("release signing not configured. Set RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD, RELEASE_STORE_PASSWORD environment variables.")
-                }
-            }
-
+        release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("sharedDebug")
-            isDebuggable = true
-            applicationIdSuffix = ".debug"
-            ext.set("enableCrashlytics", false)
         }
     }
 
-    flavorDimensions("server")
 
-    productFlavors {
-        create("dev") {
-            dimension = "server"
-            applicationIdSuffix = ".dev"
-
-            val endpoint = "https://newsapi.org/v2/"
-            buildConfigField("String", "BASE_URL", "\"$endpoint\"")
-        }
-
-        create("stage") {
-            dimension = "server"
-            applicationIdSuffix = ".stage"
-
-            val endpoint = "https://newsapi.org/v2/"
-            buildConfigField("String", "BASE_URL", "\"$endpoint\"")
-        }
-
-        create("prod") {
-            dimension = "server"
-
-            val endpoint = "https://newsapi.org/v2/"
-            buildConfigField("String", "BASE_URL", "\"$endpoint\"")
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    packagingOptions {
-        exclude("META-INF/*.kotlin_module")
+    kotlinOptions {
+        jvmTarget = "1.8"
+        useIR = true
+    }
+    buildFeatures.compose = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-beta07"
+        kotlinCompilerVersion = "1.4.32"
     }
 }
 
 dependencies {
-    implementation(Deps.Libs.Android.appCompat)
-    implementation(Deps.Libs.Android.material)
-    implementation(Deps.Libs.Android.recyclerView)
-    implementation(Deps.Libs.Android.swipeRefreshLayout)
-    implementation(Deps.Libs.Android.mokoMvvmDataBinding)
-
-    implementation(platform(Deps.Libs.Android.firebaseBom))
-    implementation(Deps.Libs.Android.firebaseCrashlytics)
+    val compose_version = "1.0.0-beta07"
+    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("com.google.android.material:material:1.3.0")
+    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation("androidx.compose.material:material:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha06")
+    testImplementation("junit:junit:4.+")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
 
     implementation(project(":mpp-library"))
-}
-
-multiplatformUnits {
-    classesPackage = "org.example.app"
-    dataBindingPackage = "org.example.app"
-    layoutsSourceSet = "main"
 }
 
 //apply(plugin = Deps.Plugins.googleServices.id)

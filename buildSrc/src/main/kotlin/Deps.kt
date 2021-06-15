@@ -35,7 +35,6 @@ object Deps {
     private const val kotlinxSerializationVersion = "1.1.0"
     private const val kotlinxDateTimeVersion = "0.1.1"
     private const val coroutinesVersion = "1.4.3-native-mt"
-    private const val ktorClientVersion = "1.5.4"
 
     private const val detektVersion = "1.15.0"
 
@@ -44,7 +43,6 @@ object Deps {
     private const val mokoResourcesVersion = "0.15.1"
     private const val mokoMvvmVersion = "0.10.1"
     private const val mokoErrorsVersion = "0.3.3"
-    private const val mokoNetworkVersion = "0.15.0"
     private const val mokoUnitsVersion = "0.5.0"
     private const val mokoPermissionsVersion = "0.9.0"
     private const val mokoMediaVersion = "0.8.2"
@@ -54,6 +52,9 @@ object Deps {
 
     private const val multiplatformSettingsVersion = "0.7.4"
     private const val napierVersion = "1.4.1"
+
+    private const val androidCoreTestingVersion = "2.1.0"
+    private const val robolectricVersion = "4.4"
 
     object Android {
         const val compileSdk = 30
@@ -76,10 +77,7 @@ object Deps {
         val mobileMultiplatform = GradlePlugin(id = "dev.icerock.mobile.multiplatform")
         val iosFramework = GradlePlugin(id = "dev.icerock.mobile.multiplatform.ios-framework")
 
-        val mokoNetwork = GradlePlugin(
-            id = "dev.icerock.mobile.multiplatform-network-generator",
-            module = "dev.icerock.moko:network-generator:$mokoNetworkVersion"
-        )
+
         val mokoResources = GradlePlugin(
             id = "dev.icerock.mobile.multiplatform-resources",
             module = "dev.icerock.moko:resources-generator:$mokoResourcesVersion"
@@ -120,8 +118,6 @@ object Deps {
                 "com.github.bumptech.glide:glide:$glideVersion"
             const val lifecycle =
                 "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-            const val ktorClientOkHttp =
-                "io.ktor:ktor-client-okhttp:$ktorClientVersion"
             const val firebaseBom =
                 "com.google.firebase:firebase-bom:$firebaseBomVersion"
             const val firebaseCrashlytics =
@@ -186,6 +182,29 @@ object Deps {
             }
         }
 
+        object Tests {
+            const val kotlinTestJUnit =
+                "org.jetbrains.kotlin:kotlin-test-junit:$kotlinTestVersion"
+            const val androidCoreTesting =
+                "androidx.arch.core:core-testing:$androidCoreTestingVersion"
+            const val coroutinesTest =
+                "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+            const val mokoTest =
+                "dev.icerock.moko:test-core:$mokoTestVersion"
+            const val mokoMvvmTest =
+                "dev.icerock.moko:mvvm-test:$mokoMvvmVersion"
+            const val mokoPermissionsTest =
+                "dev.icerock.moko:permissions-test:$mokoPermissionsVersion"
+            const val mokoMediaTest =
+                "dev.icerock.moko:media-test:$mokoMediaVersion"
+            const val mokoUnitsTest =
+                "dev.icerock.moko:units-test:$mokoUnitsVersion"
+            const val robolectric =
+                "org.robolectric:robolectric:$robolectricVersion"
+            const val multiplatformSettingsTest =
+                "com.russhwolf:multiplatform-settings-test:$multiplatformSettingsVersion"
+        }
+
         object MultiPlatform {
             const val kotlinSerialization =
                 "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion"
@@ -193,10 +212,6 @@ object Deps {
                 "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion"
             const val coroutines =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-            const val ktorClient =
-                "io.ktor:ktor-client-core:$ktorClientVersion"
-            const val ktorClientLogging =
-                "io.ktor:ktor-client-logging:$ktorClientVersion"
 
             val mokoResources = "dev.icerock.moko:resources:$mokoResourcesVersion"
                 .defaultMPL(ios = true)
@@ -211,10 +226,6 @@ object Deps {
             val mokoMvvmState = "dev.icerock.moko:mvvm-state:$mokoMvvmVersion"
                 .defaultMPL(ios = true)
             val mokoErrors = "dev.icerock.moko:errors:$mokoErrorsVersion"
-                .defaultMPL(ios = true)
-            val mokoNetwork = "dev.icerock.moko:network:$mokoNetworkVersion"
-                .defaultMPL(ios = true)
-            val mokoNetworkErrors = "dev.icerock.moko:network-errors:$mokoNetworkVersion"
                 .defaultMPL(ios = true)
             val mokoPermissions = "dev.icerock.moko:permissions:$mokoPermissionsVersion"
                 .defaultMPL(ios = true)
@@ -252,7 +263,6 @@ object Deps {
                 const val mokoUnitsTest = "dev.icerock.moko:units-test:$mokoUnitsVersion"
                 const val multiplatformSettingsTest =
                     "com.russhwolf:multiplatform-settings-test:$multiplatformSettingsVersion"
-                const val ktorClientMock = "io.ktor:ktor-client-mock:$ktorClientVersion"
             }
         }
 
@@ -264,8 +274,8 @@ object Deps {
 
     object Modules {
         object Feature {
-            val auth = MultiPlatformModule(
-                name = ":mpp-library:feature:auth",
+            val main = MultiPlatformModule(
+                name = ":mpp-library:feature:main",
                 exported = true
             )
         }
