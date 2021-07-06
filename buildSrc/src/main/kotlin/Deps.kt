@@ -55,6 +55,7 @@ object Deps {
 
     private const val androidCoreTestingVersion = "2.1.0"
     private const val robolectricVersion = "4.4"
+    private const val klockVersion = "1.12.0"
 
     object Android {
         const val compileSdk = 30
@@ -252,7 +253,9 @@ object Deps {
                     iosArm64 = it.replace(Regex("(.*):(.*):(.*)"), "$1:$2-iosArm64:$3")
                 )
             }
-
+            val klock = MultiPlatformLibrary(
+                common = "com.soywiz.korlibs.klock:klock:$klockVersion"
+            )
             object Tests {
                 const val kotlinTest =
                     "org.jetbrains.kotlin:kotlin-test-common:$kotlinTestVersion"

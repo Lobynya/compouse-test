@@ -16,6 +16,14 @@ android{
     }
 }
 
+kotlin {
+    macosX64("native") { // on macOS
+        binaries {
+            executable()
+        }
+    }
+}
+
 dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.coroutines)
 
@@ -23,6 +31,7 @@ dependencies {
 
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoMvvmLiveData.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoResources.common)
+    commonMainImplementation(Deps.Libs.MultiPlatform.klock.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
 
 }

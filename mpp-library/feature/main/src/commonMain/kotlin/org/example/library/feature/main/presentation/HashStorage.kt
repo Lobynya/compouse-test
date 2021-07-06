@@ -1,11 +1,13 @@
 package org.example.library.feature.main.presentation
 
-class HashStorage {
-    private val currentHash = mutableListOf<String>()
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.internal.AtomicDesc
 
-    fun getCurrentHash(): List<String> = currentHash
+expect class HashStorage() {
+    val hashSize: StateFlow<Int>
 
-    fun addNewHash(newHash: String) {
-        currentHash.add(newHash)
-    }
+    fun getCurrentHash(): List<String>
+
+    fun addNewHash(oldHash: List<String>, newHash: List<String>): Boolean
 }
